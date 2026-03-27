@@ -23,9 +23,9 @@ INSERT IGNORE INTO pokemon (pokedex_number, name, type1, type2, generation) VALU
 (7, 'Squirtle', 'Agua', NULL, 1),
 (8, 'Wartortle', 'Agua', NULL, 1),
 (9, 'Blastoise', 'Agua', NULL, 1),
-(25, 'Pikachu', 'Eléctrico', NULL, 1),
-(26, 'Raichu', 'Eléctrico', NULL, 1),
+(25, 'Pikachu', 'Electrico', NULL, 1),
+(26, 'Raichu', 'Electrico', NULL, 1),
 (133, 'Eevee', 'Normal', NULL, 1),
 (143, 'Snorlax', 'Normal', NULL, 1),
-(149, 'Dragonite', 'Dragón', 'Volador', 1),
-(150, 'Mewtwo', 'Psíquico', NULL, 1);
+(149, 'Dragonite', 'Dragon', 'Volador', 1),
+(150, 'Mewtwo', 'Psiquico', NULL, 1);
