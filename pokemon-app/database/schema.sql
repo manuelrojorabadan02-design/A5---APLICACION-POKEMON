@@ -1,31 +1,67 @@
 -- pokemon-app/database/schema.sql
 
-CREATE DATABASE IF NOT EXISTS pokemon_db;
-USE pokemon_db;
+CREATE DATABASE IF NOT EXISTS app_db;
+USE app_db;
 
-CREATE TABLE IF NOT EXISTS pokemon (
+DROP VIEW IF EXISTS vista_top_competitivo;
+DROP TABLE IF EXISTS caught_pokemon;
+DROP TABLE IF EXISTS gym;
+DROP TABLE IF EXISTS trainer;
+DROP TABLE IF EXISTS pokemon;
+
+CREATE TABLE pokemon (
     id INT AUTO_INCREMENT PRIMARY KEY,
     pokedex_number INT NOT NULL UNIQUE,
     name VARCHAR(100) NOT NULL,
     type1 VARCHAR(50) NOT NULL,
     type2 VARCHAR(50) DEFAULT NULL,
-    generation INT NOT NULL
+    generation INT NOT NULL,
+    hp INT DEFAULT 0,
+    attack INT DEFAULT 0,
+    defense INT DEFAULT 0,
+    sp_attack INT DEFAULT 0,
+    sp_defense INT DEFAULT 0,
+    speed INT DEFAULT 0
 );
 
--- Datos iniciales (Seed)
-INSERT IGNORE INTO pokemon (pokedex_number, name, type1, type2, generation) VALUES 
-(1, 'Bulbasaur', 'Planta', 'Veneno', 1),
-(2, 'Ivysaur', 'Planta', 'Veneno', 1),
-(3, 'Venusaur', 'Planta', 'Veneno', 1),
-(4, 'Charmander', 'Fuego', NULL, 1),
-(5, 'Charmeleon', 'Fuego', NULL, 1),
-(6, 'Charizard', 'Fuego', 'Volador', 1),
-(7, 'Squirtle', 'Agua', NULL, 1),
-(8, 'Wartortle', 'Agua', NULL, 1),
-(9, 'Blastoise', 'Agua', NULL, 1),
-(25, 'Pikachu', 'Electrico', NULL, 1),
-(26, 'Raichu', 'Electrico', NULL, 1),
-(133, 'Eevee', 'Normal', NULL, 1),
-(143, 'Snorlax', 'Normal', NULL, 1),
-(149, 'Dragonite', 'Dragon', 'Volador', 1),
-(150, 'Mewtwo', 'Psiquico', NULL, 1);
+CREATE TABLE trainer (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE gym (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    leader_id INT,
+    FOREIGN KEY (leader_id) REFERENCES trainer(id)
+);
+
+CREATE TABLE caught_pokemon (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pokedex_number INT NOT NULL,
+    trainer_id INT NOT NULL,
+    level INT DEFAULT 1,
+    stats INT DEFAULT 0,
+    nickname VARCHAR(100) DEFAULT NULL,
+    FOREIGN KEY (pokedex_number) REFERENCES pokemon(pokedex_number),
+    FOREIGN KEY (trainer_id) REFERENCES trainer(id)
+);
+
+CREATE VIEW vista_top_competitivo AS 
+SELECT 
+    name, 
+    (hp + attack + defense + sp_attack + sp_defense + speed) as total_stats 
+FROM pokemon 
+ORDER BY total_stats DESC 
+LIMIT 10;
+
+-- Datos iniciales (Seed) de entrenadores y gimnasios
+INSERT INTO trainer (id, name) VALUES 
+(1, 'Ash Ketchum'),
+(2, 'Gary Oak'),
+(3, 'Misty'),
+(4, 'Brock');
+
+INSERT INTO gym (id, name, leader_id) VALUES 
+(1, 'Gimnasio Celeste', 3),
+(2, 'Gimnasio Plateado', 4);

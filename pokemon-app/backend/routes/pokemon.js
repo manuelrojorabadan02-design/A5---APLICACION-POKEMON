@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
 
         if (name) {
             query += ' AND name LIKE ?';
-            params.push(`%${name}%`);
+            params.push(`${name}%`);
         }
 
         if (type) {
@@ -19,8 +19,14 @@ router.get('/', async (req, res) => {
             params.push(type, type);
         }
 
+        const startTime = performance.now();
         const [rows] = await pool.query(query, params);
-        res.json(rows);
+        const endTime = performance.now();
+        const executionTime = endTime - startTime;
+
+        console.log(`Consulta de buscar pokemon tardó: ${executionTime.toFixed(2)} ms`);
+
+        res.json({ data: rows, executionTimeMs: executionTime });
     } catch (error) {
         console.error("Error obteniendo pokemon:", error);
         res.status(500).json({ error: 'Error interno del servidor' });

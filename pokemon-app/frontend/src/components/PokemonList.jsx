@@ -27,6 +27,24 @@ const PokemonList = ({ pokemons }) => {
                             <span className={`type-badge type-${poke.type2.toLowerCase()}`}>{poke.type2}</span>
                         )}
                     </div>
+                    <button
+                        style={{ marginTop: '15px', background: 'green', color: 'white', border: 'none', padding: '8px', borderRadius: '5px', cursor: 'pointer' }}
+                        onClick={async () => {
+                            try {
+                                const trId = prompt('¿Qué entrenador lo captura? (1=Ash, 2=Gary, 3=Misty, 4=Brock)', '1');
+                                if (!trId) return;
+                                const res = await fetch('http://localhost:5000/caught_pokemon', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ pokedex_number: poke.pokedex_number, trainer_id: trId, nickname: poke.name })
+                                });
+                                if (res.ok) alert('¡Capturado con éxito!');
+                                else alert('Error al capturar');
+                            } catch (e) { console.error(e) }
+                        }}
+                    >
+                        Capturar
+                    </button>
                 </div>
             ))}
         </div>

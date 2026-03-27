@@ -1,8 +1,13 @@
 import React from 'react';
 
-const Search = ({ search, setSearch, type, setType }) => {
+const Search = ({ search, setSearch, type, setType, executionTime }) => {
     return (
         <div className="search-container">
+            {executionTime !== null && (
+                <div className="execution-time">
+                    Tiempo de consulta: {executionTime.toFixed(2)} ms
+                </div>
+            )}
             <input
                 type="text"
                 className="search-input"
